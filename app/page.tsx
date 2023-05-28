@@ -1,10 +1,11 @@
+import Board from "@/components/Board";
 import Header from "@/components/Header";
 
 export default function Home() {
   return (
-    <main>
+    <main className="px-4 md:px-3">
       <Header />
-      <h1>Building Trello board</h1>
+      <Board />
     </main>
   );
 }
