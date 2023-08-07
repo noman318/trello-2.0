@@ -34,7 +34,7 @@ const Header = () => {
   //   };
   //   fetchSuggestionFunction();
   // }, [board]);
-  console.log("suggestion in Header", suggestion);
+  // console.log("suggestion in Header", suggestion);
   return (
     <header>
       <div className="flex flex-col items-center p-5 md:flex-row bg-gray-500/10 rounded-b-2xl">
