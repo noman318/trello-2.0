@@ -48,21 +48,21 @@ const Header = () => {
           height={100}
           className="object-contain pb-10 w-44 md:w-56 md:pb-0"
         />
-        <div className="flex items-center justify-end flex-1 w-full space-x-5">
-          <form className="flex items-center flex-1 p-2 space-x-5 bg-white rounded-md shadow-md md:flex-initial">
+        <div className="flex items-center justify-end w-full space-x-2 md:space-x-5">
+          <form className="flex items-center flex-1 p-2 space-x-2 md:space-x-5 bg-white rounded-md shadow-md md:flex-initial">
             <MagnifyingGlassIcon className="w-6 h-6 text-gray-400" />
             <input
               type="text"
               placeholder="Search"
               value={searchString}
               onChange={(e) => setSearchString(e.target.value)}
-              className="flex-1 p-2 outline-none"
+              className="flex-1 p-2 outline-none text-sm w-full"
             />
             <button hidden type="submit">
               Search
             </button>
           </form>
-          <Avatar name="Noman Shaikh" size="50" round color="#0055d1" />
+          <Avatar name="Noman Shaikh" size="45" round color="#0055d1" />
         </div>
       </div>
       <div className="flex items-center justify-center px-5 py-2 md:py-5">
@@ -80,3 +80,24 @@ const Header = () => {
 };
 
 export default Header;
+{
+  /* <div className="flex items-center justify-end flex-1 w-full space-x-5">
+          <form className="flex items-center flex-1 p-2 space-x-5 bg-white rounded-md shadow-md md:flex-initial">
+            <MagnifyingGlassIcon
+              // className="w-6 h-6 text-gray-400"
+              className="w-6 h-6 text-gray-400 mb-2 md:mb-0 md:mr-2 sm:w-3 sm:h-6"
+            />
+            <input
+              type="text"
+              placeholder="Search"
+              value={searchString}
+              onChange={(e) => setSearchString(e.target.value)}
+              className="flex-1 p-2 outline-none"
+            />
+            <button hidden type="submit">
+              Search
+            </button>
+          </form>
+          <Avatar name="Noman Shaikh" size="50" round color="#0055d1" />
+        </div> */
+}

@@ -1,7 +1,9 @@
 "use client";
+import getURL from "@/lib/getURL";
 import { useBoardStore } from "@/store/boardStore";
 import { XCircleIcon } from "@heroicons/react/24/solid";
-import React from "react";
+import Image from "next/image";
+import React, { useEffect, useState } from "react";
 import {
   DraggableProvidedDragHandleProps,
   DraggableProvidedDraggableProps,
@@ -24,7 +26,21 @@ const TodoCard = ({
   dragHandleProps,
   draggableProps,
 }: Props) => {
+  const [imageURL, setImageURL] = useState<string | null>(null);
+
   const deleteTask = useBoardStore((state) => state.deleteTask);
+  useEffect(() => {
+    if (todo.image) {
+      const fetchImage = async () => {
+        const url = await getURL(todo.image!);
+        if (url) {
+          setImageURL(url?.toString());
+        }
+      };
+      fetchImage();
+    }
+  }, [todo]);
+  // console.log("imageURL", imageURL);
   const handleDeleteTasks = () => {
     deleteTask(index, todo, id);
   };
@@ -44,6 +60,17 @@ const TodoCard = ({
           <XCircleIcon className="w-8 h-8" />
         </button>
       </div>
+      {imageURL && (
+        <div className="w-full h-full relative rounded-b-md">
+          <Image
+            src={imageURL}
+            height={200}
+            width={400}
+            alt="todo-image"
+            className="w-full object-contain rounded-b-md"
+          />
+        </div>
+      )}
     </div>
   );
 };

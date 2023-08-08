@@ -1,19 +1,46 @@
 "use client";
-import { useState, Fragment } from "react";
+import { useState, Fragment, useRef, FormEvent } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { useModalStore } from "@/store/modalStore";
+import { useBoardStore } from "@/store/boardStore";
+import TaskTypeRadioGroup from "./TaskTypeRadioGroup";
+import Image from "next/image";
+import { PhotoIcon } from "@heroicons/react/24/solid";
 
 function Modal() {
   //   let [isOpen, setIsOpen] = useState(true);
+  const imagePickRef = useRef<HTMLInputElement>(null);
   const [isOpen, closeModal] = useModalStore((state) => [
     state.isOpen,
-    state.openModal,
     state.closeModal,
   ]);
 
+  const [newTask, setNewTask, image, setImage, addTask, newTaskType] =
+    useBoardStore((state) => [
+      state.newTask,
+      state.setNewTask,
+      state.image,
+      state.setImage,
+      state.addTask,
+      state.newTaskType,
+    ]);
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!newTask) return;
+    addTask(newTask, newTaskType, image);
+    setImage(null);
+    closeModal();
+  };
+
   return (
     <Transition appear show={isOpen} as={Fragment}>
-      <Dialog as="form" className={"relative z-10"} onClose={closeModal}>
+      <Dialog
+        as="form"
+        className={"relative z-10"}
+        onClose={closeModal}
+        onSubmit={handleSubmit}
+      >
         {/*
           Use one Transition.Child to apply one transition to the backdrop...
         */}
@@ -47,6 +74,58 @@ function Modal() {
                 >
                   Add a Task
                 </Dialog.Title>
+                <div className="mt-2">
+                  <input
+                    type="text"
+                    placeholder="Enter new Task here..."
+                    value={newTask}
+                    onChange={(e) => setNewTask(e.target.value)}
+                    className="w-full border border-gray-200 rounded-md outline-none p-5"
+                  />
+                </div>
+                <TaskTypeRadioGroup />
+                <div>
+                  <button
+                    className="w-full border border-gray-300 rounded-md outline-none p-5 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                    onClick={() => {
+                      imagePickRef.current?.click();
+                    }}
+                    type="button"
+                  >
+                    <PhotoIcon className="h-6 w-6 mr-2 inline-block" />
+                    Upload Image
+                  </button>
+                  {image && (
+                    <Image
+                      alt="Uploaded Image"
+                      height={200}
+                      width={200}
+                      className="w-full h-44 object-cover mt-2 filter hover:grayscale transition-all duration-150 cursor-not-allowed"
+                      src={URL.createObjectURL(image)}
+                      onClick={() => {
+                        setImage(null);
+                      }}
+                    />
+                  )}
+                  <input
+                    type="file"
+                    ref={imagePickRef}
+                    hidden
+                    onChange={(e) => {
+                      if (!e.target.files![0].type.startsWith("image/")) return;
+                      setImage(e.target.files![0]);
+                    }}
+                  />
+                </div>
+                <div className="mt-5">
+                  <button
+                    type="submit"
+                    disabled={!newTask}
+                    className="px-4 py-4 inline-flex justify-center rounded-md border border-transparent bg-blue-100 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:bg-gray-100 disabled:text-gray-300 disabled:cursor-not-allowed"
+                  >
+                    Add Task
+                  </button>
+                </div>
               </Dialog.Panel>
             </Transition.Child>
           </div>
